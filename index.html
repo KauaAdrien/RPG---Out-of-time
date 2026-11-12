@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de RPG - Until Dawn x Slasher Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Creepster&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        :root {
+            --bg-dark: #04070d;
+            --card-bg: #070c14;
+            --accent-cyan: #7dd3fc;
+            --accent-ice: #38bdf8;
+            --accent-blood: #dc2626;
+            --accent-blood-dark: #8b0000;
+            --border-color: #1e293b;
+            --border-glow: rgba(220, 38, 38, 0.4);
+            --text-main: #f1f5f9;
+        }
+
+        /* PALETAS TEMÁTICAS INTERATIVAS */
+        body.theme-cold-blood {
+            --bg-dark: #030712;
+            --card-bg: #070d18;
+            --accent-cyan: #7dd3fc;
+            --accent-ice: #38bdf8;
+            --accent-blood: #ef4444;
+            --accent-blood-dark: #991b1b;
+            --border-glow: rgba(56, 189, 248, 0.4);
+        }
+
+        body.theme-vhs-slasher {
+            --bg-dark: #0a0304;
+            --card-bg: #140709;
+            --accent-cyan: #fca5a5;
+            --accent-ice: #f87171;
+            --accent-blood: #dc2626;
+            --accent-blood-dark: #7f1d1d;
+            --border-glow: rgba(220, 38, 38, 0.6);
+        }
+
+        body.theme-blizzard-nightmare {
+            --bg-dark: #020617;
+            --card-bg: #0b1329;
+            --accent-cyan: #e0f2fe;
+            --accent-ice: #bae6fd;
+            --accent-blood: #f43f5e;
+            --accent-blood-dark: #be123c;
+            --border-glow: rgba(224, 242, 254, 0.5);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .rpg-font {
+            font-family: 'Cinzel', serif;
+        }
+
+        .slasher-font {
+            font-family: 'Creepster', cursive;
+        }
+
+        /* Container A4 exato de 2 Páginas */
+        .page-sheet {
+            width: 210mm;
+            height: 296.8mm;
+            background-color: var(--card-bg);
+            background-image: 
+                radial-gradient(circle at 80% 10%, rgba(220, 38, 38, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 20% 90%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(3, 7, 18, 0.95) 0%, #050911 100%);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95), 0 0 15px rgba(220, 38, 38, 0.15);
+            padding: 10mm 12mm 8mm 12mm;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Marcas de Sangue e Cortes Stylized */
+        .page-sheet::before {
+            content: "";
+            position: absolute;
+            top: 0; right: 0; width: 120px; height: 120px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Inputs e Textareas com estética Slasher/Ice */
+        input[type="text"], input[type="number"], textarea {
+            background: rgba(3, 7, 18, 0.7);
+            border: 1px solid var(--border-color);
+            color: #f8fafc;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--accent-blood);
+            box-shadow: 0 0 10px var(--border-glow);
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        /* Molduras Gothic Slasher */
+        .gothic-box {
+            border: 1px solid var(--border-color);
+            background: rgba(8, 14, 24, 0.85);
+            border-radius: 4px;
+            padding: 8px;
+            position: relative;
+            backdrop-filter: blur(4px);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6);
+        }
+
+        .gothic-title {
+            background: #030712;
+            color: var(--accent-cyan);
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 1.2px;
+            padding: 2px 8px;
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-blood);
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Roda Hexagonal de Atributos */
+        .attr-wheel-container {
+            position: relative;
+            width: 195px;
+            height: 195px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .attr-center-hex {
+            width: 82px;
+            height: 82px;
+            background: rgba(3, 7, 18, 0.95);
+            border: 2px solid var(--accent-blood);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-cyan);
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 0.78rem;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+            text-shadow: 0 0 6px rgba(0, 0, 0, 0.9);
+        }
+
+        .attr-node {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #080e18;
+            border: 2px solid var(--accent-ice);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+            transition: border-color 0.2s;
+        }
+
+        .attr-node:hover {
+            border-color: var(--accent-blood);
+        }
+
+        .attr-node label {
+            font-size: 0.6rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            font-family: 'Cinzel', serif;
+            line-height: 1;
+        }
+
+        .attr-node input {
+            width: 28px;
+            height: 18px;
+            text-align: center;
+            padding: 0;
+            border: none;
+            background: transparent;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #f8fafc;
+        }
+
+        .node-agi { top: 0; left: calc(50% - 22px); }
+        .node-sab { top: 34px; right: 4px; }
+        .node-ast { bottom: 34px; right: 4px; }
+        .node-vig { bottom: 0; left: calc(50% - 22px); }
+        .node-car { bottom: 34px; left: 4px; }
+        .node-for { top: 34px; left: 4px; }
+
+        /* Tabela de Perícias Compacta */
+        .skills-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.69rem;
+        }
+
+        .skills-table th {
+            background: #030712;
+            color: var(--accent-cyan);
+            font-family: 'Cinzel', serif;
+            padding: 3px 6px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .skills-table td {
+            padding: 1.5px 5px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .skills-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.015);
+        }
+
+        .skill-val-input {
+            width: 36px !important;
+            height: 18px !important;
+            font-size: 0.7rem !important;
+            text-align: center;
+            padding: 0 !important;
+        }
+
+        /* Foto do Personagem */
+        .photo-upload-area {
+            width: 100%;
+            height: 125px;
+            border: 2px dashed var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(3, 7, 18, 0.6);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.2s ease;
+        }
+
+        .photo-upload-area:hover {
+            border-color: var(--accent-blood);
+        }
+
+        .photo-upload-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Controles Flutuantes */
+        .action-bar {
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            background: #090e17;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-blood);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.9);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-action:hover {
+            background: var(--accent-blood);
+            color: #ffffff;
+            box-shadow: 0 0 15px var(--border-glow);
+        }
+
+        /* REGRAS DE IMPRESSÃO / PDF A4 EXACT */
+        @media print {
+            body {
+                background: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .action-bar, .no-print {
+                display: none !important;
+            }
+
+            .page-sheet {
+                width: 210mm !important;
+                height: 297mm !important;
+                margin: 0 !important;
+                padding: 10mm 12mm !important;
+                box-shadow: none !important;
+                border: none !important;
+                background-color: #fff !important;
+                color: #000 !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .page-sheet:last-child {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+
+            .gothic-box {
+                background: rgba(245, 245, 245, 0.8) !important;
+                border-color: #000 !important;
+                box-shadow: none !important;
+            }
+
+            .gothic-title {
+                background: #000 !important;
+                color: #fff !important;
+                border-color: #000 !important;
+                border-left-color: #900 !important;
+                text-shadow: none !important;
+            }
+
+            input[type="text"], input[type="number"], textarea {
+                background: transparent !important;
+                color: #000 !important;
+                border-bottom: 1px solid #444 !important;
+                border-top: none !important;
+                border-left: none !important;
+                border-right: none !important;
+                border-radius: 0 !important;
+            }
+
+            .attr-center-hex {
+                background: #fff !important;
+                color: #000 !important;
+                border-color: #000 !important;
+                text-shadow: none !important;
+            }
+
+            .attr-node {
+                background: #fff !important;
+                border-color: #000 !important;
+            }
+
+            .attr-node label, .attr-node input {
+                color: #000 !important;
+            }
+
+            .skills-table th {
+                background: #222 !important;
+                color: #fff !important;
+            }
+
+            .skills-table td {
+                border-color: #ccc !important;
+                color: #000 !important;
+            }
+
+            .skills-table tr:nth-child(even) {
+                background-color: #f2f2f2 !important;
+            }
+
+            .footer-tag {
+                color: #555 !important;
+                border-top-color: #ccc !important;
+            }
+        }
+
+        @media screen and (max-width: 800px) {
+            .page-sheet {
+                width: 100vw;
+                height: auto;
+                min-height: 100vh;
+                padding: 15px;
+                margin-bottom: 15px;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body class="theme-cold-blood">
+
+    <!-- CONTROLES FLUTUANTES -->
+    <div class="action-bar">
+        <!-- SELETOR DE TEMAS -->
+        <select onchange="changeTheme(this.value)" id="theme-selector" class="btn-action !py-1">
+            <option value="theme-cold-blood">🩸 Until Dawn Slasher</option>
+            <option value="theme-vhs-slasher">🔪 VHS Blood Slasher</option>
+            <option value="theme-blizzard-nightmare">❄️ Blizzard Nightmare</option>
+        </select>
+
+        <!-- COMPARTILHAR LINK -->
+        <button class="btn-action" onclick="shareSheetLink()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5z"/>
+            </svg>
+            Compartilhar Link
+        </button>
+
+        <!-- LIMPAR FICHA -->
+        <button class="btn-action !border-red-900 hover:!bg-red-950" onclick="clearSheetData()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+            </svg>
+            Limpar Ficha
+        </button>
+
+        <!-- IMPRIMIR / SALVAR PDF -->
+        <button class="btn-action" onclick="window.print()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+                <path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm1 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-2z"/>
+            </svg>
+            Salvar em PDF
+        </button>
+    </div>
+
+    <!-- MENSAGEM / NOTIFICAÇÃO TOAST -->
+    <div id="toast-msg" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[9999] bg-slate-900 border border-sky-400 text-sky-200 px-4 py-2 rounded shadow-2xl text-xs font-bold font-mono tracking-wider transition-opacity duration-300 opacity-0 pointer-events-none no-print">
+        LINK COPIADO PARA A ÁREA DE TRANSFERÊNCIA!
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 1: FICHA DO PERSONAGEM              -->
+    <!-- ========================================== -->
+    <section class="page-sheet" id="page-1">
+        <div>
+            <!-- CABEÇALHO PRINCIPAL -->
+            <div class="grid grid-cols-2 gap-4 mb-2 pb-2 border-b border-slate-800">
+                <div class="flex items-center gap-2">
+                    <span class="rpg-font font-bold text-sm text-red-500 tracking-wider">PERSONAGEM:</span>
+                    <input type="text" placeholder="Nome do Sobrevivente" class="font-bold text-base">
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="rpg-font font-bold text-sm text-sky-400 tracking-wider">JOGADOR:</span>
+                    <input type="text" placeholder="Nome do Jogador" class="font-bold text-base">
+                </div>
+            </div>
+
+            <!-- GRID SUPERIOR: ATRIBUTOS + STATUS vs PERÍCIAS -->
+            <div class="grid grid-cols-12 gap-3">
+
+                <!-- COLUNA ESQUERDA: ATRIBUTOS E STATUS (5 Cols) -->
+                <div class="col-span-5 flex flex-col gap-2">
+
+                    <!-- RODA DE ATRIBUTOS (HEXÁGONO) -->
+                    <div class="gothic-box flex flex-col items-center py-2">
+                        <div class="attr-wheel-container">
+                            <div class="attr-center-hex">Atributos</div>
+                            
+                            <!-- AGI -->
+                            <div class="attr-node node-agi">
+                                <label>AGI</label>
+                                <input type="number" value="0" id="attr-agi" onchange="calcDefesa()">
+                            </div>
+                            <!-- SAB -->
+                            <div class="attr-node node-sab">
+                                <label>SAB</label>
+                                <input type="number" value="0">
+                            </div>
+                            <!-- AST -->
+                            <div class="attr-node node-ast">
+                                <label>AST</label>
+                                <input type="number" value="0">
+                            </div>
+                            <!-- VIG -->
+                            <div class="attr-node node-vig">
+                                <label>VIG</label>
+                                <input type="number" value="0">
+                            </div>
+                            <!-- CAR -->
+                            <div class="attr-node node-car">
+                                <label>CAR</label>
+                                <input type="number" value="0">
+                            </div>
+                            <!-- FOR -->
+                            <div class="attr-node node-for">
+                                <label>FOR</label>
+                                <input type="number" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MARCA E REPUTAÇÃO -->
+                    <div class="gothic-box space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="rpg-font text-xs font-bold text-sky-400 w-20">MARCA:</span>
+                            <input type="text" class="text-xs">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="rpg-font text-xs font-bold text-sky-400 w-20">REPUTAÇÃO:</span>
+                            <input type="text" class="text-xs">
+                        </div>
+                    </div>
+
+                    <!-- PONTOS DE VIDA E SACRIFÍCIO -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="gothic-box">
+                            <span class="gothic-title block text-center !mb-1">Pontos de Vida</span>
+                            <div class="flex gap-1 items-center">
+                                <input type="number" placeholder="Atual" class="text-center font-bold text-sm text-red-400">
+                                <span class="text-slate-600">/</span>
+                                <input type="number" placeholder="Máx" class="text-center text-xs text-slate-400">
+                            </div>
+                        </div>
+                        <div class="gothic-box">
+                            <span class="gothic-title block text-center !mb-1">Sacrifício</span>
+                            <div class="flex gap-1 items-center">
+                                <input type="number" placeholder="Atual" class="text-center font-bold text-sm text-sky-400">
+                                <span class="text-slate-600">/</span>
+                                <input type="number" placeholder="Máx" class="text-center text-xs text-slate-400">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DEFESA & MEDO / PULSO -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="gothic-box flex flex-col justify-between">
+                            <span class="gothic-title !mb-1">Defesa</span>
+                            <div class="text-[0.65rem] text-slate-400 font-mono">= 6 + AGI</div>
+                            <div class="flex items-center gap-1">
+                                <span class="text-xs text-slate-400">Bônus:</span>
+                                <input type="number" value="0" id="attr-def-bonus" class="text-center" onchange="calcDefesa()">
+                            </div>
+                            <div class="mt-1 pt-1 border-t border-slate-800 text-center font-bold text-red-400 text-sm" id="def-total">
+                                Total: 6
+                            </div>
+                        </div>
+                        <div class="gothic-box flex flex-col justify-between">
+                            <div>
+                                <span class="gothic-title !mb-1">Nível de Medo</span>
+                                <input type="text" class="text-xs text-center font-bold">
+                            </div>
+                            <div class="mt-1">
+                                <span class="gothic-title !mb-1">Pulso</span>
+                                <input type="text" class="text-xs text-center font-bold">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- COLUNA DIREITA: PERÍCIAS (7 Cols) -->
+                <div class="col-span-7">
+                    <div class="gothic-box h-full">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="gothic-title !mb-0">Perícias</span>
+                            <span class="text-[0.65rem] text-slate-400 uppercase tracking-widest">Base de Testes</span>
+                        </div>
+                        <table class="skills-table">
+                            <thead>
+                                <tr>
+                                    <th>Perícia</th>
+                                    <th class="w-16 text-center">Bônus</th>
+                                    <th class="w-16 text-center">Outros</th>
+                                </tr>
+                            </thead>
+                            <tbody id="skills-list">
+                                <!-- Preenchido dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- SEÇÃO INFERIOR: HABILIDADES & INVENTÁRIO -->
+            <div class="grid grid-cols-2 gap-3 mt-2">
+                <div class="gothic-box">
+                    <span class="gothic-title">Habilidades:</span>
+                    <textarea rows="3" class="text-xs" placeholder="Habilidades ativas, passivas, traumas..."></textarea>
+                </div>
+                <div class="gothic-box">
+                    <span class="gothic-title">Inventário:</span>
+                    <textarea rows="3" class="text-xs" placeholder="Ferramentas, suprimentos de sobrevivência..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- RODAPÉ PÁGINA 1 -->
+        <div class="footer-tag flex justify-between items-center pt-2 border-t border-slate-800 text-[0.65rem] text-slate-500 rpg-font">
+            <span>UNTIL DAWN x SLASHER SYSTEM</span>
+            <span>PÁGINA 1 DE 2</span>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 2: INVENTÁRIO & FICHA DE INIMIGO NO FINAL -->
+    <!-- ========================================== -->
+    <section class="page-sheet" id="page-2">
+        <div class="flex flex-col h-full justify-between">
+            <div>
+                <!-- CABEÇALHO PÁGINA 2 -->
+                <div class="flex justify-between items-center mb-2 pb-2 border-b border-slate-800">
+                    <div class="rpg-font font-bold text-base text-red-500 tracking-widest uppercase">
+                        INVENTÁRIO DETALHADO, COMBATE &amp; FRAQUEZAS
+                    </div>
+                    <div class="text-xs text-slate-400 rpg-font">REGISTRO DE SOBREVIVÊNCIA</div>
+                </div>
+
+                <!-- SEÇÃO SUPERIOR DA PÁGINA 2: ARMAS, FRAQUEZA E FOTO -->
+                <div class="grid grid-cols-12 gap-3 mb-3">
+                    
+                    <!-- COLUNA ESQUERDA: ARMAS E FRAQUEZAS (7 Cols) -->
+                    <div class="col-span-7 flex flex-col gap-2">
+                        <!-- ARMAS -->
+                        <div class="gothic-box">
+                            <span class="gothic-title">Armas &amp; Ferramentas de Defesa:</span>
+                            <textarea rows="4" class="text-xs font-mono" placeholder="Arma / Item | Dano | Crítico | Especial&#10;----------------------------------------"></textarea>
+                        </div>
+
+                        <!-- FRAQUEZAS -->
+                        <div class="gothic-box">
+                            <span class="gothic-title">Fraqueza &amp; Vulnerabilidades:</span>
+                            <textarea rows="3" class="text-xs" placeholder="Gatilhos de pânico, fobias, desvantagens físicas..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA DIREITA: FOTO DO PERSONAGEM (5 Cols) -->
+                    <div class="col-span-5">
+                        <div class="gothic-box h-full flex flex-col justify-between">
+                            <span class="gothic-title">Fotografia / Evidência</span>
+                            <div class="photo-upload-area mt-1" onclick="document.getElementById('photo-input').click()">
+                                <img id="photo-preview" src="" class="hidden" alt="Foto">
+                                <div id="photo-placeholder" class="text-center p-2">
+                                    <svg class="w-6 h-6 mx-auto text-slate-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="text-[0.68rem] text-slate-400 font-bold block rpg-font">CARREGAR RETRATO</span>
+                                </div>
+                            </div>
+                            <input type="file" id="photo-input" class="hidden" accept="image/*" onchange="loadPhoto(event)">
+                            <div class="mt-2 flex gap-1">
+                                <input type="text" id="photo-url" placeholder="URL da foto..." class="text-[0.7rem]">
+                                <button class="btn-action !py-1 !px-2 text-[0.65rem]" onclick="loadPhotoUrl()">OK</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- SEÇÃO INFERIOR DA PÁGINA 2: FICHA DE INIMIGO / AMEAÇA POR ÚLTIMO -->
+                <div class="gothic-box bg-slate-950/90 border-red-950/60 shadow-2xl">
+                    <div class="text-center border-b border-red-950/60 pb-1 mb-2">
+                        <span class="slasher-font text-red-600 text-lg tracking-widest block">Ficha de Inimigo / Ameaça</span>
+                    </div>
+
+                    <div class="grid grid-cols-12 gap-3">
+                        <!-- Lado Esquerdo do Inimigo -->
+                        <div class="col-span-5 flex flex-col gap-2">
+                            <!-- ATRIBUTOS DO INIMIGO -->
+                            <div>
+                                <span class="gothic-title">Atributos:</span>
+                                <textarea rows="2" class="text-xs font-mono" placeholder="FOR: 0 | AGI: 0 | VIG: 0&#10;AST: 0 | SAB: 0 | CAR: 0"></textarea>
+                            </div>
+
+                            <!-- PV & PS DO INIMIGO -->
+                            <div>
+                                <span class="gothic-title">PV &amp; PS:</span>
+                                <div class="grid grid-cols-2 gap-1.5 mt-0.5">
+                                    <div class="gothic-box bg-black/80">
+                                        <span class="text-[0.6rem] text-red-500 font-bold block mb-0.5">PONTOS VIDA</span>
+                                        <input type="text" placeholder="Ex: 80/80" class="text-center font-bold text-xs text-red-400">
+                                    </div>
+                                    <div class="gothic-box bg-black/80">
+                                        <span class="text-[0.6rem] text-sky-400 font-bold block mb-0.5">SACRIFÍCIO</span>
+                                        <input type="text" placeholder="Ex: 30/30" class="text-center font-bold text-xs text-sky-300">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- D12 DADO BASE -->
+                            <div class="py-1 flex justify-center">
+                                <div class="w-12 h-12 bg-slate-950 border-2 border-red-600/80 rounded-full flex flex-col items-center justify-center shadow-lg shadow-red-950/80">
+                                    <span class="text-[0.48rem] text-slate-400 font-bold">DADO BASE</span>
+                                    <span class="rpg-font font-black text-red-500 text-sm leading-none">D12</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lado Direito do Inimigo -->
+                        <div class="col-span-7 flex flex-col gap-2">
+                            <!-- PERÍCIAS DO INIMIGO -->
+                            <div>
+                                <span class="gothic-title">Perícias do Inimigo:</span>
+                                <textarea rows="2" class="text-xs" placeholder="Bônus de perseguição, luta, intimidação..."></textarea>
+                            </div>
+
+                            <!-- HABILIDADES DO INIMIGO -->
+                            <div>
+                                <span class="gothic-title">Habilidades do Inimigo:</span>
+                                <textarea rows="4" class="text-xs" placeholder="Ataques letais, emboscada, fraquezas mortais..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RODAPÉ PÁGINA 2 -->
+            <div class="footer-tag flex justify-between items-center pt-2 border-t border-slate-800 text-[0.65rem] text-slate-500 rpg-font">
+                <span>UNTIL DAWN x SLASHER SYSTEM — AMEAÇAS &amp; SOBREVIVÊNCIA</span>
+                <span>PÁGINA 2 DE 2</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERATIVIDADE JS -->
+    <script>
+        const skillsList = [
+            { name: "Adestramento", attr: "SAB" },
+            { name: "Acrobacia", attr: "AGI" },
+            { name: "Artes", attr: "SAB" },
+            { name: "Atletismo", attr: "FOR" },
+            { name: "Atualidades", attr: "AST" },
+            { name: "Ciências", attr: "SAB" },
+            { name: "Concentração", attr: "AST" },
+            { name: "Diplomacia", attr: "CAR" },
+            { name: "Enganação", attr: "CAR" },
+            { name: "Furtividade", attr: "AGI" },
+            { name: "Iniciativa", attr: "AGI" },
+            { name: "Intimidação", attr: "CAR" },
+            { name: "Intuição", attr: "CAR" },
+            { name: "Investigação", attr: "AST" },
+            { name: "Luta", attr: "FOR" },
+            { name: "Medicina", attr: "SAB" },
+            { name: "Percepção", attr: "AST" },
+            { name: "Pilotagem", attr: "AGI" },
+            { name: "Pontaria", attr: "AGI" },
+            { name: "Profissão", attr: "SAB" },
+            { name: "Religião", attr: "SAB" },
+            { name: "Resistir", attr: "VIG" },
+            { name: "Reflexos", attr: "AGI" },
+            { name: "Sobrevivência", attr: "SAB" },
+            { name: "Tecnologia", attr: "AST" },
+            { name: "Vontade", attr: "AST" }
+        ];
+
+        function renderSkills() {
+            const container = document.getElementById("skills-list");
+            container.innerHTML = skillsList.map(skill => `
+                <tr>
+                    <td class="font-medium text-slate-300">
+                        ${skill.name} <span class="text-[0.6rem] text-sky-400/80">(${skill.attr})</span>
+                    </td>
+                    <td class="text-center">
+                        <div class="inline-flex items-center gap-0.5">
+                            <span class="text-slate-500 text-[0.65rem]">+</span>
+                            <input type="number" value="0" class="skill-val-input">
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="inline-flex items-center gap-0.5">
+                            <span class="text-slate-500 text-[0.65rem]">+</span>
+                            <input type="number" value="0" class="skill-val-input">
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function calcDefesa() {
+            const agi = parseInt(document.getElementById("attr-agi").value) || 0;
+            const bonus = parseInt(document.getElementById("attr-def-bonus").value) || 0;
+            const total = 6 + agi + bonus;
+            document.getElementById("def-total").innerText = `Total: ${total}`;
+        }
+
+        function loadPhoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    showPhoto(e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadPhotoUrl() {
+            const url = document.getElementById("photo-url").value;
+            if (url) showPhoto(url);
+        }
+
+        function showPhoto(src) {
+            const img = document.getElementById("photo-preview");
+            const placeholder = document.getElementById("photo-placeholder");
+            img.src = src;
+            img.classList.remove("hidden");
+            placeholder.classList.add("hidden");
+            saveStateToLocalStorage();
+        }
+
+        function changeTheme(themeName) {
+            document.body.className = themeName;
+            document.getElementById("theme-selector").value = themeName;
+            saveStateToLocalStorage();
+        }
+
+        /* AUTO-SAVE EM LOCALSTORAGE & LINK COMPARTILHÁVEL BASE64 */
+        const STORAGE_KEY = "until_dawn_rpg_sheet_data";
+
+        function collectSheetData() {
+            const data = {
+                theme: document.body.className,
+                inputs: {},
+                textareas: {},
+                photo: document.getElementById("photo-preview").src || ""
+            };
+
+            document.querySelectorAll("input").forEach((inp, idx) => {
+                if (inp.id) data.inputs[inp.id] = inp.value;
+                else data.inputs[`inp_${idx}`] = inp.value;
+            });
+
+            document.querySelectorAll("textarea").forEach((txt, idx) => {
+                if (txt.id) data.textareas[txt.id] = txt.value;
+                else data.textareas[`txt_${idx}`] = txt.value;
+            });
+
+            return data;
+        }
+
+        function restoreSheetData(data) {
+            if (!data) return;
+
+            if (data.theme) changeTheme(data.theme);
+
+            if (data.inputs) {
+                document.querySelectorAll("input").forEach((inp, idx) => {
+                    const key = inp.id || `inp_${idx}`;
+                    if (data.inputs[key] !== undefined) {
+                        inp.value = data.inputs[key];
+                    }
+                });
+            }
+
+            if (data.textareas) {
+                document.querySelectorAll("textarea").forEach((txt, idx) => {
+                    const key = txt.id || `txt_${idx}`;
+                    if (data.textareas[key] !== undefined) {
+                        txt.value = data.textareas[key];
+                    }
+                });
+            }
+
+            if (data.photo && data.photo.length > 20) {
+                showPhoto(data.photo);
+            }
+
+            calcDefesa();
+        }
+
+        function saveStateToLocalStorage() {
+            try {
+                const data = collectSheetData();
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (e) {
+                console.warn("Não foi possível salvar no localStorage:", e);
+            }
+        }
+
+        function setupAutoSaveListeners() {
+            document.addEventListener("input", () => {
+                calcDefesa();
+                saveStateToLocalStorage();
+            });
+            document.addEventListener("change", () => {
+                calcDefesa();
+                saveStateToLocalStorage();
+            });
+        }
+
+        function shareSheetLink() {
+            try {
+                const data = collectSheetData();
+                // Omitir foto muito grande para não estourar limite da URL no link se for Base64 local
+                const compactData = { ...data };
+                if (compactData.photo && compactData.photo.startsWith("data:")) {
+                    compactData.photo = ""; // Links preservam todos os atributos, textos e bônus
+                }
+
+                const jsonStr = JSON.stringify(compactData);
+                const encoded = btoa(encodeURIComponent(jsonStr));
+                const url = new URL(window.location.href);
+                url.searchParams.set("sheet", encoded);
+
+                // Copiar URL para a área de transferência usando textarea oculto para compatibilidade
+                const tempInput = document.createElement("textarea");
+                tempInput.value = url.toString();
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempInput);
+
+                showToast("LINK DA FICHA COPIADO COM SUCESSO!");
+            } catch (err) {
+                showToast("ERRO AO GERAR LINK.");
+            }
+        }
+
+        function loadDataFromUrl() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const encodedData = params.get("sheet");
+                if (encodedData) {
+                    const decodedJson = decodeURIComponent(atob(encodedData));
+                    const data = JSON.parse(decodedJson);
+                    restoreSheetData(data);
+                    showToast("FICHA CARREGADA DO LINK!");
+                    return true;
+                }
+            } catch (e) {
+                console.warn("Falha ao carregar parâmetros da URL:", e);
+            }
+            return false;
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    restoreSheetData(JSON.parse(saved));
+                }
+            } catch (e) {
+                console.warn("Falha ao carregar do localStorage:", e);
+            }
+        }
+
+        function clearSheetData() {
+            if (confirm("Deseja realmente limpar todos os dados da ficha?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                window.location.href = window.location.pathname;
+            }
+        }
+
+        function showToast(text) {
+            const toast = document.getElementById("toast-msg");
+            toast.innerText = text;
+            toast.classList.remove("opacity-0", "pointer-events-none");
+            setTimeout(() => {
+                toast.classList.add("opacity-0", "pointer-events-none");
+            }, 3000);
+        }
+
+        window.onload = () => {
+            renderSkills();
+            
+            // Tenta carregar primeiro da URL (caso esteja compartilhando), senão do localStorage
+            const loadedFromUrl = loadDataFromUrl();
+            if (!loadedFromUrl) {
+                loadFromLocalStorage();
+            }
+
+            setupAutoSaveListeners();
+            calcDefesa();
+        };
+    </script>
+</body>
+</html>
